@@ -121,7 +121,7 @@ contract EarthLpStaking is AbstractStrategy, ReentrancyGuard {
         uint256 stakeBal = IERC20(stake).balanceOf(address(this));
 
         if (stakeBal > 0) {
-            IMasterChef(chef).deposit(poolId, stakeBal);
+            //IMasterChef(chef).deposit(poolId, stakeBal);
             emit Deposit(balanceOf(), stakeBal);
         }
     }
@@ -133,7 +133,7 @@ contract EarthLpStaking is AbstractStrategy, ReentrancyGuard {
         uint256 stakeBal = IERC20(stake).balanceOf(address(this));
 
         if (stakeBal < _amount) {
-            IMasterChef(chef).withdraw(poolId, _amount - stakeBal);
+            //IMasterChef(chef).withdraw(poolId, _amount - stakeBal);
             stakeBal = IERC20(stake).balanceOf(address(this));
         }
 
@@ -266,18 +266,18 @@ contract EarthLpStaking is AbstractStrategy, ReentrancyGuard {
             asset1AmountInNative,
             _calculatFixedReturnNative(asset1AmountInNative, _strategies[1])
         );
-        _addLiquidity();
-        _deposit();
+        // _addLiquidity();
+        // _deposit();
         epochRunning = true;
     }
 
     function endEpoch() public {
         _checkOwner();
         if (epochRunning == false) revert();
-        _harvest();
+        //_harvest();
         address[] memory assetStrategiesArr = assetStrategies;
         uint256 stakedLp = balanceOfPool();
-        IMasterChef(chef).withdraw(poolId, stakedLp);
+        //IMasterChef(chef).withdraw(poolId, stakedLp);
         uint256 fixedReturnInLp = _calculatFixedReturnLp();
         address asset0 = ICommonStrat(assetStrategiesArr[0]).asset();
         address asset1 = ICommonStrat(assetStrategiesArr[1]).asset();
@@ -486,7 +486,7 @@ contract EarthLpStaking is AbstractStrategy, ReentrancyGuard {
     // called as part of strat migration. Sends all the available funds back to the vault.
     function retireStrat() external {
         onlyVault();
-        IMasterChef(chef).emergencyWithdraw(poolId);
+        //IMasterChef(chef).emergencyWithdraw(poolId);
 
         uint256 stakeBal = IERC20(stake).balanceOf(address(this));
         IERC20(stake).safeTransfer(vault, stakeBal);
@@ -496,7 +496,7 @@ contract EarthLpStaking is AbstractStrategy, ReentrancyGuard {
     function panic() public {
         onlyManager();
         pause();
-        IMasterChef(chef).emergencyWithdraw(poolId);
+        //IMasterChef(chef).emergencyWithdraw(poolId);
     }
 
     function pause() public {
