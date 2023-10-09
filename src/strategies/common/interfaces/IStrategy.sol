@@ -45,6 +45,10 @@ interface IStrategy {
 
     function managerHarvest() external;
 
+    function startEpoch(address[] memory _strategies) external;
+
+    function endEpoch() external;
+
     function retireStrat() external;
 
     function panic() external;
